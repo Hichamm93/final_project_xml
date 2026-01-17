@@ -1,0 +1,39 @@
+services:
+  db:
+    image: postgres:16
+    container_name: loulacinema_db
+    environment:
+      POSTGRES_USER: loulacinema
+      POSTGRES_PASSWORD: loulacinema
+      POSTGRES_DB: loulacinema
+    ports:
+      - "5432:5432"
+    volumes:
+      - dbdata:/var/lib/postgresql/data
+      - ./backend/seed.sql:/docker-entrypoint-initdb.d/seed.sql:ro
+
+  api:
+    build: ./backend
+    container_name: loulacinema_api
+    env_file:
+      - ./backend/.env.example
+    depends_on:
+      - db
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend:/app
+
+  frontend:
+    build: ./frontend
+    container_name: loulacinema_front
+    depends_on:
+      - api
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./frontend:/frontend
+      - /frontend/node_modules
+
+volumes:
+  dbdata:
