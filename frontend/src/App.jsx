@@ -30,13 +30,13 @@ export default function App() {
   const go = (path) => (window.location.hash = path);
 
   let page = null;
-  if (route === "/") page = <Home go={go} toast={pushToast} />;
+  if (route === "/") page = <Home go={go} toast={pushToast} user={user} />;
   else if (route.startsWith("/movie/")) page = <Movie id={parseInt(route.split("/")[2])} go={go} toast={pushToast} />;
   else if (route === "/program") page = <Program go={go} toast={pushToast} user={user} />;
   else if (route === "/me") page = <Me go={go} toast={pushToast} />;
   else if (route === "/film-owner") page = <FilmOwner go={go} toast={pushToast} />;
   else if (route === "/cinema-owner") page = <CinemaOwner go={go} toast={pushToast} />;
-  else page = <Home go={go} toast={pushToast} />;
+  else page = <Home go={go} toast={pushToast} user={user} />;
 
   return (
     <div className="min-h-screen">
