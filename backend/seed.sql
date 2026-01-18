@@ -69,13 +69,13 @@ VALUES
 
 INSERT INTO users (email, password, role, display_name)
 VALUES
-('proprio.film@loulacinema.com', '123', 'Propriétaire Films', 'Propriétaire Films'),
-('proprio.cinema.paris@loulacinema.com', '123', 'Cinéma Paris', 'Proprio Cinéma Paris'),
-('proprio.cinema.marseille@loulacinema.com', '123', 'Cinéma Marseille', 'Proprio Cinéma Marseille'),
-('proprio.cinema.lyon@loulacinema.com', '123', 'Cinéma Lyon', 'Proprio Cinéma Lyon'),
-('proprio.cinema.toulouse@loulacinema.com', '123', 'Cinéma Toulouse', 'Proprio Cinéma Toulouse'),
-('proprio.cinema.lille@loulacinema.com', '123', 'Cinéma Lille', 'Proprio Cinéma Lille'),
-('client@loulacinema.com', '123', 'Compte Client', 'Client Test');
+('proprio.film@loulacinema.com', '123', 'proprio_film', 'Propriétaire Films'),
+('proprio.cinema.paris@loulacinema.com', '123', 'proprio_cinema', 'Proprio Cinéma Paris'),
+('proprio.cinema.marseille@loulacinema.com', '123', 'proprio_cinema', 'Proprio Cinéma Marseille'),
+('proprio.cinema.lyon@loulacinema.com', '123', 'proprio_cinema', 'Proprio Cinéma Lyon'),
+('proprio.cinema.toulouse@loulacinema.com', '123', 'proprio_cinema', 'Proprio Cinéma Toulouse'),
+('proprio.cinema.lille@loulacinema.com', '123', 'proprio_cinema', 'Proprio Cinéma Lille'),
+('client@loulacinema.com', '123', 'client', 'Client Test');
 
 
 INSERT INTO cinemas (owner_user_id, name, city_id, address)
