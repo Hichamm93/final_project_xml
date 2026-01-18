@@ -208,8 +208,14 @@ def create_reservation(payload: schemas.ReservationCreateIn,
     full = db.execute(text("""
       SELECT s.*,
              ci.id as cinema_id, ci.name as cinema_name, ci.address,
-             c.id as city_id, c.name as city_name
+             c.id as city_id, c.name as city_name,
+             f.id as film_ref_id, f.title as film_title, f.synopsis as film_synopsis,
+             f.poster_url as film_poster_url, f.backdrop_url as film_backdrop_url,
+             f.duration_min as film_duration_min, f.release_year as film_release_year,
+             f.genres as film_genres, f.language as film_language,
+             f.rating as film_rating, f.featured as film_featured
       FROM screenings s
+      JOIN films f ON f.id=s.film_id
       JOIN cinemas ci ON ci.id=s.cinema_id
       JOIN cities c ON c.id=ci.city_id
       WHERE s.id=:id
@@ -223,9 +229,15 @@ def my_reservations(auth=Depends(require_role("client")), db: Session = Depends(
       SELECT r.id as res_id, r.seats, r.created_at,
              s.*,
              ci.id as cinema_id, ci.name as cinema_name, ci.address,
-             c.id as city_id, c.name as city_name
+             c.id as city_id, c.name as city_name,
+             f.id as film_ref_id, f.title as film_title, f.synopsis as film_synopsis,
+             f.poster_url as film_poster_url, f.backdrop_url as film_backdrop_url,
+             f.duration_min as film_duration_min, f.release_year as film_release_year,
+             f.genres as film_genres, f.language as film_language,
+             f.rating as film_rating, f.featured as film_featured
       FROM reservations r
       JOIN screenings s ON s.id=r.screening_id
+      JOIN films f ON f.id=s.film_id
       JOIN cinemas ci ON ci.id=s.cinema_id
       JOIN cities c ON c.id=ci.city_id
       WHERE r.user_id=:u AND s.starts_at > NOW()
