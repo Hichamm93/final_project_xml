@@ -71,11 +71,11 @@ export default function Movie({ id, go, toast }) {
       </button>
 
       <div className="mt-5 grid md:grid-cols-[220px,1fr] gap-6">
-        <div className="rounded-2xl overflow-hidden border border-zinc-800 bg-zinc-900">
+        <div className="rounded-2xl overflow-hidden border border-zinc-800 bg-zinc-900 aspect-[2/3]">
           {film.poster_url ? (
-            <img src={film.poster_url} alt={film.title} className="w-full object-cover" />
+            <img src={film.poster_url} alt={film.title} className="w-full h-full object-cover" />
           ) : (
-            <div className="aspect-[2/3] flex items-center justify-center text-zinc-500">
+            <div className="w-full h-full flex items-center justify-center text-zinc-500">
               No poster
             </div>
           )}
