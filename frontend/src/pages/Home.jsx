@@ -11,7 +11,7 @@ function getQueryQ() {
   return decodeURIComponent(h.slice(i + 3));
 }
 
-export default function Home({ go, toast }) {
+export default function Home({ go, toast, user }) {
   const [featured, setFeatured] = useState([]);
   const [all, setAll] = useState([]);
   const [open, setOpen] = useState(null);
@@ -38,6 +38,7 @@ export default function Home({ go, toast }) {
         film={hero}
         onOpen={() => hero && setOpen(hero)}
         onPlay={() => go("/program")}
+        user={user}
       />
 
       <Rail title={q ? `Résultats pour “${q}”` : "Nouveautés"} items={all.slice(0, 18)} onOpen={setOpen} />
