@@ -9,8 +9,10 @@ export default function Navbar({ route, go, user, setUser, toast }) {
 
   const links = useMemo(() => {
     const base = [{ label: "Accueil", path: "/" }];
-    if (user?.role === "client") {
+    if (!user || user?.role === "client") {
       base.push({ label: "Programmation", path: "/program" });
+    }
+    if (user?.role === "client") {
       base.push({ label: "Mes réservations", path: "/me" });
     }
     if (user?.role === "proprio_film") base.push({ label: "Mon tableau de bord", path: "/film-owner" });

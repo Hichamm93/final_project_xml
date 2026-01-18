@@ -10,7 +10,7 @@ export default function Program({ go, toast, user }) {
   useEffect(() => {
     (async () => {
       try {
-        if (!user || user.role !== "client") return;
+        if (user && user.role !== "client") return;
         const c = await api.cities();
         setCities(c);
       } catch (e) {
@@ -22,7 +22,7 @@ export default function Program({ go, toast, user }) {
   useEffect(() => {
     (async () => {
       try {
-        if (!user || user.role !== "client") return;
+        if (user && user.role !== "client") return;
         const p = await api.program(city || undefined);
         setItems(p);
       } catch (e) {
@@ -31,7 +31,7 @@ export default function Program({ go, toast, user }) {
     })();
   }, [city, user]);
 
-  if (!user || user.role !== "client") {
+  if (user && user.role !== "client") {
     return <div className="max-w-6xl mx-auto px-4 py-10 text-zinc-300">Accès client uniquement.</div>;
   }
 

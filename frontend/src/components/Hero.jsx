@@ -44,7 +44,7 @@ export default function Hero({ onPlay, user }) {
       return `Pilotez la programmation ${cityLabel} et planifiez vos séances depuis votre tableau de bord.`;
     }
     if (user.role === "proprio_film") {
-      return `Suivez la diffusion de vos films ${cityLabel} et mettez à jour votre catalogue.`;
+      return "Suivez la diffusion de vos films partout en France et mettez à jour votre catalogue.";
     }
     return CLIENT_TAGLINE;
   })();
@@ -66,14 +66,16 @@ export default function Hero({ onPlay, user }) {
             {tagline}
           </p>
 
-          <div className="mt-6">
-            <button
-              onClick={onPlay}
-              className="px-6 py-3 rounded-full bg-red-600 hover:bg-red-500 transition font-semibold shadow-glow"
-            >
-              Voir la programmation
-            </button>
-          </div>
+          {(!user || user.role === "client") && (
+            <div className="mt-6">
+              <button
+                onClick={onPlay}
+                className="px-6 py-3 rounded-full bg-red-600 hover:bg-red-500 transition font-semibold shadow-glow"
+              >
+                Voir la programmation
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </div>
