@@ -311,7 +311,12 @@ def my_films_programmed(auth=Depends(require_role("proprio_film")), db: Session 
     rows = db.execute(text("""
       SELECT s.*,
              ci.id as cinema_id, ci.name as cinema_name, ci.address,
-             c.id as city_id, c.name as city_name
+             c.id as city_id, c.name as city_name,
+             f.id as film_ref_id, f.title as film_title, f.synopsis as film_synopsis,
+             f.poster_url as film_poster_url, f.backdrop_url as film_backdrop_url,
+             f.duration_min as film_duration_min, f.release_year as film_release_year,
+             f.genres as film_genres, f.language as film_language,
+             f.rating as film_rating, f.featured as film_featured
       FROM screenings s
       JOIN films f ON f.id=s.film_id
       JOIN cinemas ci ON ci.id=s.cinema_id

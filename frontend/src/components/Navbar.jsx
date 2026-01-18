@@ -8,13 +8,13 @@ export default function Navbar({ route, go, user, setUser, toast }) {
   const [authOpen, setAuthOpen] = useState(false);
 
   const links = useMemo(() => {
-    const base = [
-      { label: "Accueil", path: "/" },
-      { label: "Programmation", path: "/program" }
-    ];
-    if (user?.role === "client") base.push({ label: "Mes résas", path: "/me" });
-    if (user?.role === "proprio_film") base.push({ label: "Proprio Film", path: "/film-owner" });
-    if (user?.role === "proprio_cinema") base.push({ label: "Proprio Cinéma", path: "/cinema-owner" });
+    const base = [{ label: "Accueil", path: "/" }];
+    if (user?.role === "client") {
+      base.push({ label: "Programmation", path: "/program" });
+      base.push({ label: "Mes réservations", path: "/me" });
+    }
+    if (user?.role === "proprio_film") base.push({ label: "Mon tableau de bord", path: "/film-owner" });
+    if (user?.role === "proprio_cinema") base.push({ label: "Mon tableau de bord", path: "/cinema-owner" });
     return base;
   }, [user]);
 
