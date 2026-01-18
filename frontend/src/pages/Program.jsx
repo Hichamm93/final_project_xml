@@ -41,11 +41,12 @@ export default function Program({ go, toast }) {
       <div className="mt-6 grid md:grid-cols-2 gap-3">
         {items.map((s) => {
           const dt = new Date(s.starts_at);
+          const filmTitle = s.film?.title || "Film inconnu";
           return (
             <button
               key={s.id}
               onClick={() => {
-                const fid = Number(s.film_id);
+                const fid = Number(s.film?.id ?? s.film_id);
                 if (!Number.isFinite(fid)) {
                   toast("Cette séance n'a pas de film associé (film_id manquant).");
                   return;
@@ -57,9 +58,18 @@ export default function Program({ go, toast }) {
 
               <div className="flex items-start justify-between gap-3">
                 <div>
-                  <div className="font-semibold">{s.cinema.city.name} • {s.cinema.name}</div>
-                  <div className="text-xs text-zinc-400">{s.cinema.address} • {s.room}</div>
-                  <div className="mt-2 text-sm">{dt.toLocaleString()} • {(s.price_cents / 100).toFixed(2)}€</div>
+                  <div className="font-semibold">{filmTitle}</div>
+                  <div className="text-xs text-zinc-400">
+                    {s.cinema.city.name} • {s.cinema.name} • {s.room}
+                  </div>
+                  <div className="mt-2 text-sm">
+                    Séance : {dt.toLocaleString()} • {(s.price_cents / 100).toFixed(2)}€
+                  </div>
+                  {s.film?.duration_min && (
+                    <div className="text-xs text-zinc-400 mt-1">
+                      Durée : {s.film.duration_min} min
+                    </div>
+                  )}
                 </div>
                 <div className="text-xs text-zinc-400">
                   {s.booked_seats}/{s.total_seats}

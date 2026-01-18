@@ -46,8 +46,23 @@ def row_to_film(r):
         "featured": r["featured"],
     }
 
-def row_to_screening(r):
+def row_to_film_from_screening(r):
     return {
+        "id": r["film_ref_id"],
+        "title": r["film_title"],
+        "synopsis": r["film_synopsis"],
+        "poster_url": r["film_poster_url"],
+        "backdrop_url": r["film_backdrop_url"],
+        "duration_min": r["film_duration_min"],
+        "release_year": r["film_release_year"],
+        "genres": r["film_genres"],
+        "language": r["film_language"],
+        "rating": r["film_rating"],
+        "featured": r["film_featured"],
+    }
+
+def row_to_screening(r):
+    screening = {
         "id": r["id"],
         "starts_at": r["starts_at"],
         "room": r["room"],
@@ -56,6 +71,9 @@ def row_to_screening(r):
         "booked_seats": r["booked_seats"],
         "cinema": row_to_cinema(r),
     }
+    if "film_title" in r:
+        screening["film"] = row_to_film_from_screening(r)
+    return screening
 
 # --- Health ---
 @app.get("/health")
@@ -134,8 +152,14 @@ def program(city: str | None = None, db: Session = Depends(get_db)):
         rows = db.execute(text("""
           SELECT s.*,
                  ci.id as cinema_id, ci.name as cinema_name, ci.address,
-                 c.id as city_id, c.name as city_name
+                 c.id as city_id, c.name as city_name,
+                 f.id as film_ref_id, f.title as film_title, f.synopsis as film_synopsis,
+                 f.poster_url as film_poster_url, f.backdrop_url as film_backdrop_url,
+                 f.duration_min as film_duration_min, f.release_year as film_release_year,
+                 f.genres as film_genres, f.language as film_language,
+                 f.rating as film_rating, f.featured as film_featured
           FROM screenings s
+          JOIN films f ON f.id=s.film_id
           JOIN cinemas ci ON ci.id=s.cinema_id
           JOIN cities c ON c.id=ci.city_id
           WHERE lower(c.name)=:city AND s.starts_at > NOW()
@@ -145,8 +169,14 @@ def program(city: str | None = None, db: Session = Depends(get_db)):
         rows = db.execute(text("""
           SELECT s.*,
                  ci.id as cinema_id, ci.name as cinema_name, ci.address,
-                 c.id as city_id, c.name as city_name
+                 c.id as city_id, c.name as city_name,
+                 f.id as film_ref_id, f.title as film_title, f.synopsis as film_synopsis,
+                 f.poster_url as film_poster_url, f.backdrop_url as film_backdrop_url,
+                 f.duration_min as film_duration_min, f.release_year as film_release_year,
+                 f.genres as film_genres, f.language as film_language,
+                 f.rating as film_rating, f.featured as film_featured
           FROM screenings s
+          JOIN films f ON f.id=s.film_id
           JOIN cinemas ci ON ci.id=s.cinema_id
           JOIN cities c ON c.id=ci.city_id
           WHERE s.starts_at > NOW()

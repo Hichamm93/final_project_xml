@@ -52,6 +52,7 @@ class ScreeningOut(BaseModel):
     total_seats: int
     booked_seats: int
     cinema: CinemaOut
+    film: Optional[FilmOut] = None
 
 class FilmDetailOut(BaseModel):
     film: FilmOut
