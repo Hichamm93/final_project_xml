@@ -84,12 +84,6 @@ export default function AuthModal({ onClose, onAuthed }) {
             {loading ? "..." : tab === "login" ? "Se connecter" : "Créer le compte"}
           </button>
 
-          <div className="mt-4 text-xs text-zinc-400 leading-relaxed">
-            Comptes demo: <br/>
-            client@demo.com / client (client) <br/>
-            film@demo.com / film (proprio_film) <br/>
-            cinema@demo.com / cinema (proprio_cinema)
-          </div>
         </div>
       </div>
     </div>
