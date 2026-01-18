@@ -36,7 +36,7 @@ export default function Navbar({ route, go, user, setUser, toast }) {
       <div className="fixed top-0 left-0 right-0 z-50 bg-gradient-to-b from-black/90 to-black/30 backdrop-blur">
         <div className="max-w-6xl mx-auto px-4 h-16 flex items-center gap-4">
           <button onClick={() => go("/")} className="flex items-center gap-2">
-            <img src={logo} alt="LouLa" className="h-9 w-9 object-contain" />
+            <img src={logo} alt="LouLa" className="h-12 w-12 object-contain" />
             <span className="font-semibold tracking-wide">LouLa Cinema</span>
           </button>
 

@@ -59,6 +59,7 @@ export const api = {
   ownerProgrammed: () => req("/owner/films/programmed", { auth: true }),
 
   myCinemas: () => req("/cinema/mine", { auth: true }),
+  cinemaScreenings: () => req("/cinema/screenings", { auth: true }),
   cinemaCreateScreening: (payload) => req("/cinema/screenings", { method: "POST", body: payload, auth: true }),
   cinemaUpdateScreening: (id, payload) => req(`/cinema/screenings/${id}`, { method: "PATCH", body: payload, auth: true }),
   cinemaDeleteScreening: (id) => req(`/cinema/screenings/${id}`, { method: "DELETE", auth: true })
