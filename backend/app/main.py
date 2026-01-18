@@ -332,6 +332,26 @@ def my_cinemas(auth=Depends(require_role("proprio_cinema")), db: Session = Depen
     """), {"u": auth["user_id"]}).mappings().all()
     return [{"id": r["id"], "name": r["name"], "address": r["address"], "city": {"id": r["city_id"], "name": r["city_name"]}} for r in rows]
 
+@app.get("/cinema/screenings", response_model=list[schemas.ScreeningOut])
+def my_cinema_screenings(auth=Depends(require_role("proprio_cinema")), db: Session = Depends(get_db)):
+    rows = db.execute(text("""
+      SELECT s.*,
+             ci.id as cinema_id, ci.name as cinema_name, ci.address,
+             c.id as city_id, c.name as city_name,
+             f.id as film_ref_id, f.title as film_title, f.synopsis as film_synopsis,
+             f.poster_url as film_poster_url, f.backdrop_url as film_backdrop_url,
+             f.duration_min as film_duration_min, f.release_year as film_release_year,
+             f.genres as film_genres, f.language as film_language,
+             f.rating as film_rating, f.featured as film_featured
+      FROM screenings s
+      JOIN cinemas ci ON ci.id=s.cinema_id
+      JOIN cities c ON c.id=ci.city_id
+      JOIN films f ON f.id=s.film_id
+      WHERE ci.owner_user_id=:u AND s.starts_at > NOW()
+      ORDER BY s.starts_at
+    """), {"u": auth["user_id"]}).mappings().all()
+    return [row_to_screening(r) for r in rows]
+
 @app.post("/cinema/screenings", response_model=schemas.ScreeningOut)
 def create_screening(payload: schemas.ScreeningCreateIn,
                      auth=Depends(require_role("proprio_cinema")),

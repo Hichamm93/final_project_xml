@@ -32,7 +32,7 @@ export default function App() {
   let page = null;
   if (route === "/") page = <Home go={go} toast={pushToast} />;
   else if (route.startsWith("/movie/")) page = <Movie id={parseInt(route.split("/")[2])} go={go} toast={pushToast} />;
-  else if (route === "/program") page = <Program go={go} toast={pushToast} />;
+  else if (route === "/program") page = <Program go={go} toast={pushToast} user={user} />;
   else if (route === "/me") page = <Me go={go} toast={pushToast} />;
   else if (route === "/film-owner") page = <FilmOwner go={go} toast={pushToast} />;
   else if (route === "/cinema-owner") page = <CinemaOwner go={go} toast={pushToast} />;
