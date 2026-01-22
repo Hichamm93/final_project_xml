@@ -75,6 +75,11 @@ def row_to_screening(r):
         screening["film"] = row_to_film_from_screening(r)
     return screening
 
+def ensure_future_screening(starts_at: datetime):
+    now = datetime.now(starts_at.tzinfo) if starts_at.tzinfo else datetime.now()
+    if starts_at <= now:
+        raise HTTPException(400, "La séance doit être programmée dans le futur.")
+
 # --- Health ---
 @app.get("/health")
 def health(db: Session = Depends(get_db)):
@@ -365,6 +370,7 @@ def create_screening(payload: schemas.ScreeningCreateIn,
                       {"id": payload.cinema_id, "u": auth["user_id"]}).first()
     if not owns:
         raise HTTPException(403, "Not your cinema")
+    ensure_future_screening(payload.starts_at)
 
     r = db.execute(text("""
       INSERT INTO screenings(cinema_id,film_id,starts_at,room,price_cents,total_seats)
@@ -402,6 +408,8 @@ def update_screening(screening_id: int, payload: schemas.ScreeningUpdateIn,
     fields = payload.model_dump(exclude_unset=True)
     if not fields:
         raise HTTPException(400, "No fields")
+    if "starts_at" in fields:
+        ensure_future_screening(fields["starts_at"])
     sets = ", ".join([f"{k} = :{k}" for k in fields.keys()])
     fields.update({"id": screening_id})
     db.execute(text(f"UPDATE screenings SET {sets} WHERE id=:id"), fields)
