@@ -48,15 +48,33 @@ export default function CinemaOwner({ toast }) {
   if (!user) return <div className="max-w-6xl mx-auto px-4 py-10 text-zinc-300">Connecte-toi.</div>;
   if (user.role !== "proprio_cinema") return <div className="max-w-6xl mx-auto px-4 py-10 text-zinc-300">Accès proprio cinéma uniquement.</div>;
 
+  const toLocalInput = (value) => {
+    const d = new Date(value);
+    const offset = d.getTimezoneOffset() * 60000;
+    return new Date(d.getTime() - offset).toISOString().slice(0, 16);
+  };
+
+  const toApiDateTime = (value) => (value && value.length === 16 ? `${value}:00` : value);
+
+  const isPastDateTime = (value) => {
+    const dt = new Date(value);
+    return Number.isNaN(dt.getTime()) ? false : dt <= new Date();
+  };
+
+  const minDateTime = toLocalInput(new Date());
+
   const create = async () => {
     try {
       if (!cinemaId) return toast("Aucun cinéma.");
       if (!form.film_id) return toast("Choisis un film.");
       if (!form.starts_at) return toast("Choisis une date.");
+      if (isPastDateTime(form.starts_at)) {
+        return toast("Impossible de programmer une séance dans le passé.");
+      }
       await api.cinemaCreateScreening({
         cinema_id: Number(cinemaId),
         film_id: Number(form.film_id),
-        starts_at: new Date(form.starts_at).toISOString(),
+        starts_at: toApiDateTime(form.starts_at),
         room: form.room,
         price_cents: Number(form.price_cents),
         total_seats: Number(form.total_seats)
@@ -66,12 +84,6 @@ export default function CinemaOwner({ toast }) {
     } catch (e) {
       toast(e.message);
     }
-  };
-
-  const toLocalInput = (value) => {
-    const d = new Date(value);
-    const offset = d.getTimezoneOffset() * 60000;
-    return new Date(d.getTime() - offset).toISOString().slice(0, 16);
   };
 
   const startEdit = (screening) => {
@@ -87,8 +99,11 @@ export default function CinemaOwner({ toast }) {
   const saveEdit = async (id) => {
     try {
       if (!editForm.starts_at) return toast("Choisis une date.");
+      if (isPastDateTime(editForm.starts_at)) {
+        return toast("Impossible de programmer une séance dans le passé.");
+      }
       await api.cinemaUpdateScreening(id, {
-        starts_at: new Date(editForm.starts_at).toISOString(),
+        starts_at: toApiDateTime(editForm.starts_at),
         room: editForm.room,
         price_cents: Number(editForm.price_cents),
         total_seats: Number(editForm.total_seats)
@@ -152,6 +167,7 @@ export default function CinemaOwner({ toast }) {
               type="datetime-local"
               value={form.starts_at}
               onChange={(e)=>setForm({...form, starts_at: e.target.value})}
+              min={minDateTime}
               className="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-4 py-3"
             />
           </div>
@@ -238,6 +254,7 @@ export default function CinemaOwner({ toast }) {
                         type="datetime-local"
                         value={editForm.starts_at}
                         onChange={(e) => setEditForm({ ...editForm, starts_at: e.target.value })}
+                        min={minDateTime}
                         className="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-sm"
                       />
                     </div>
